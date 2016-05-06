@@ -1,0 +1,6 @@
+name: FakerMaker
+type: module
+description: 'Sensible dummy data generation.'
+version: VERSION
+core: 8.x
+package: Core

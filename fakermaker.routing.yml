@@ -1,0 +1,7 @@
+fakermaker.settings_global:
+  path: '/admin/config/fakermaker/settings'
+  defaults:
+    _form: '\Drupal\fakermaker\Form\FakerMakerSettingsForm'
+    _title: 'Fakermaker settings'
+  requirements:
+    _permission: 'administer fakermaker'

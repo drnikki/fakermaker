@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ * Functions for fakermaker
+ */
+
+use \Drupal\core\Entity\EntityTypeInterface;
+use \Drupal\core\Field\BaseFieldDefinition;
+
+/**
+ * hook_form_FORM_ID_alter()
+ */
+function fakermaker_form_field_config_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'field_config_edit_form') {
+  // copying from /core/modules/field_ui/src/Form/FieldConfigEditForm.php
+    $form['fakermaker_value'] =  array(
+      '#type' => 'details',
+      '#title' => t('Default generation value'),
+      '#open' => TRUE,
+      '#tree' => TRUE,
+      '#description' => t('The default value for generating new content during generation. Generation. Generation.'),
+    );
+
+    $form['fakermaker_value']['generation'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Generator text'),
+      '#default_value' => 'lorem ipsum',
+      '#rows' => 5,
+      '#description' => t('here are some details about how this works'),
+      '#weight' => -10,
+    );
+  }
+   $tes = "testing";
+}
+
+
+/**
+http://drupal.stackexchange.com/questions/176314/how-to-add-a-simple-checkbox-in-field-api
+ */
+// wut doez this do?!
+//http://slides.com/dolaresko/d8-field-api
+function fakermaker_entity_base_field_info(EntityTypeInterface $entity_type) {
+  // @todo: Make this configurable and/or remove if
+  //   https://drupal.org/node/476294 is resolved.
+//  if ($entity_type->id() === 'node') {
+//    $fields['fakermaker'] = BaseFieldDefinition::create('fakermaker')
+//      ->setCustomStorage(TRUE)
+//      ->setLabel(t('FAKER MAKER TESTING.'))
+//      ->setTranslatable(TRUE)
+//      ->setComputed(TRUE)
+//      ->setDisplayOptions('form', array(
+//        'type' => 'path',
+//        'weight' => 30,
+//      ))
+//      ->setDisplayConfigurable('form', TRUE);
+//
+//    return $fields;
+//  }
+}
+
+
+/// trying stuff
+//http://www.drupalcontrib.org/api/drupal/drupal%21core%21includes%21entity.api.php/function/hook_entity_info/8
+function fakermaker_entity_info(&$entity_info) {
+ $var = 'do stuff';
+  $varalso = $entity_info;
+
+}
+
+//https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Entity%21entity.api.php/function/hook_entity_type_build/8.1.x
+/**
+ * Implements hook_entity_type_build().
+ */
+function fakermaker_entity_type_build(array &$entity_types) {
+  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  $test = 'test';
+  var_dump($entity_types);
+  $entity_types['field_config']->config_export[] = 'generator_value';
+}
+
