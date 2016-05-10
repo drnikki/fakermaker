@@ -5,3 +5,38 @@ fakermaker.settings_global:
     _title: 'Fakermaker settings'
   requirements:
     _permission: 'administer fakermaker'
+
+
+entity.pattern.delete_form:
+  path: '/admin/config/pattern/manage/{pattern}/delete'
+  defaults:
+    _entity_form: pattern.delete
+    _title: 'Delete FakerMaker Pattern'
+  requirements:
+    _permission: 'administer fakermaker'
+
+
+fakermaker.pattern_add:
+  path: '/admin/config/pattern/add'
+  defaults:
+    _entity_form: pattern.default
+    _title: 'Add FakerMaker Pattern'
+  requirements:
+    _permission: 'administer fakermaker'
+
+
+entity.pattern.edit_form:
+  path: '/admin/config/pattern/manage/{pattern}'
+  defaults:
+    _entity_form: pattern.default
+    _title: 'List pattern'
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.pattern.collection:
+  path: '/admin/config/pattern'
+  defaults:
+    _entity_form: pattern.default
+    _title: 'Add FakerMaker Pattern'
+  requirements:
+    _permission: 'administer fakermaker'

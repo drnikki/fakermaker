@@ -14,12 +14,10 @@ use Drupal\fakermaker\PatternInterface;
  *   handlers = {
  *     "list_builder" = "Drupal\fakermaker\PatternListBuilder",
  *     "form" = {
+ *       "default" = "Drupal\fakermaker\Form\PatternForm",
  *       "add" = "Drupal\fakermaker\Form\PatternForm",
  *       "edit" = "Drupal\fakermaker\Form\PatternForm",
  *       "delete" = "Drupal\fakermaker\Form\PatternDeleteForm"
- *     },
- *     "route_provider" = {
- *       "html" = "Drupal\fakermaker\PatternHtmlRouteProvider",
  *     },
  *   },
  *   config_prefix = "pattern",

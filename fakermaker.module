@@ -76,6 +76,6 @@ function fakermaker_entity_type_build(array &$entity_types) {
   /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
   $test = 'test';
   var_dump($entity_types);
-  $entity_types['field_config']->config_export[] = 'generator_value';
+  //$entity_types['field_config']->config_export[] = 'generator_value';
 }
 
