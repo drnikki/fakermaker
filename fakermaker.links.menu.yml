@@ -1,0 +1,8 @@
+# Pattern menu items definition
+entity.pattern.collection:
+  title: 'Pattern'
+  route_name: entity.pattern.collection
+  description: 'List Pattern (bundles)'
+  parent: system.admin_structure
+  weight: 99
+

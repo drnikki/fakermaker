@@ -1,0 +1,6 @@
+entity.pattern.add_form:
+  route_name: 'entity.pattern.add_form'
+  title: 'Add Pattern'
+  appears_on:
+    - entity.pattern.collection
+
