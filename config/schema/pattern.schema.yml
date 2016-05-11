@@ -8,5 +8,8 @@ fakermaker.pattern.*:
     label:
       type: label
       label: 'Label'
+    field:
+      type: string
+      label: 'Field'
     uuid:
       type: string

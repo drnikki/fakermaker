@@ -1,6 +1,5 @@
-#entity.pattern.add_form:
-#  route_name: 'entity.pattern.add_form'
-#  title: 'Add Pattern'
-#  appears_on:
-#    - entity.pattern.collection
-
+fakermaker.pattern_add:
+  route_name: 'fakermaker.pattern_add'
+  title: 'Add Pattern'
+  appears_on:
+    - entity.pattern.collection

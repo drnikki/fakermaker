@@ -37,6 +37,13 @@ class PatternForm extends EntityForm {
       '#disabled' => !$pattern->isNew(),
     );
 
+    $form['field'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Field Name'),
+      '#default_value' => $pattern->getField(),
+      '#description' => $this->t('The machine name of the field'),
+    );
+
     /* You will need additional form elements for your custom properties. */
 
     return $form;

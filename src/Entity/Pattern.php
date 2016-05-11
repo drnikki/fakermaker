@@ -14,7 +14,6 @@ use Drupal\fakermaker\PatternInterface;
  *   handlers = {
  *     "list_builder" = "Drupal\fakermaker\PatternListBuilder",
  *     "form" = {
- *       "default" = "Drupal\fakermaker\Form\PatternForm",
  *       "add" = "Drupal\fakermaker\Form\PatternForm",
  *       "edit" = "Drupal\fakermaker\Form\PatternForm",
  *       "delete" = "Drupal\fakermaker\Form\PatternDeleteForm"
@@ -27,13 +26,10 @@ use Drupal\fakermaker\PatternInterface;
  *     "label" = "label",
  *     "uuid" = "uuid"
  *   },
- *   links = {
- *     "canonical" = "/admin/structure/pattern/{pattern}",
- *     "add-form" = "/admin/structure/pattern/add",
- *     "edit-form" = "/admin/structure/pattern/{pattern}/edit",
- *     "delete-form" = "/admin/structure/pattern/{pattern}/delete",
- *     "collection" = "/admin/structure/pattern"
- *   }
+ *  links = {
+ *    "edit" = "/admin/config/pattern/manage/{pattern}",
+ *    "collection" = "/admin/config/pattern"
+ *  }
  * )
  */
 class Pattern extends ConfigEntityBase implements PatternInterface {
@@ -51,5 +47,17 @@ class Pattern extends ConfigEntityBase implements PatternInterface {
    * @var string
    */
   protected $label;
+
+  /**
+   * The Pattern field.
+   *
+   * @var string
+   */
+  protected $field;
+
+
+  public function getField() {
+    return $this->field;
+  }
 
 }

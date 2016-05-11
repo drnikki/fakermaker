@@ -15,20 +15,18 @@ entity.pattern.delete_form:
   requirements:
     _permission: 'administer fakermaker'
 
-
 fakermaker.pattern_add:
   path: '/admin/config/pattern/add'
   defaults:
-    _entity_form: pattern.default
+    _entity_form: pattern.add
     _title: 'Add FakerMaker Pattern'
   requirements:
     _permission: 'administer fakermaker'
 
-
-entity.pattern.edit_form:
+entity.pattern.edit:
   path: '/admin/config/pattern/manage/{pattern}'
   defaults:
-    _entity_form: pattern.default
+    _entity_form: pattern.edit
     _title: 'List pattern'
   requirements:
     _permission: 'administer site configuration'
@@ -36,7 +34,7 @@ entity.pattern.edit_form:
 entity.pattern.collection:
   path: '/admin/config/pattern'
   defaults:
-    _entity_form: pattern.default
-    _title: 'Add FakerMaker Pattern'
+    _entity_list: 'pattern'
+    _title: 'FakerMaker Patterns'
   requirements:
     _permission: 'administer fakermaker'
