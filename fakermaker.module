@@ -2,19 +2,19 @@
 
 /**
  * @file
- * Functions for fakermaker
+ * Functions for fakermaker.
  */
 
 use \Drupal\core\Entity\EntityTypeInterface;
 use \Drupal\core\Field\BaseFieldDefinition;
 
 /**
- * hook_form_FORM_ID_alter()
+ * Implements hook_form_FORM_ID_alter().
  */
 function fakermaker_form_field_config_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   if ($form_id == 'field_config_edit_form') {
-  // copying from /core/modules/field_ui/src/Form/FieldConfigEditForm.php
-    // in form context, can get default value here)
+    // copied from /core/modules/field_ui/src/Form/FieldConfigEditForm.php
+    // in form context, can get default value here.
     $form['fakermaker_value'] =  array(
       '#type' => 'details',
       '#title' => t('Default generation value'),
@@ -31,33 +31,67 @@ function fakermaker_form_field_config_edit_form_alter(&$form, \Drupal\Core\Form\
       '#description' => t('here are some details about how this works'),
       '#weight' => -10,
     );
+
+    $form['actions']['submit']['#submit'][] = 'fakermaker_form_field_config_edit_form_submit';
+    // need a validate one to validate the integrity of the tokenz.
+    //$form['actions']['submit']['#submit'][] = 'fakermaker_form_submit';
+
   }
-   $tes = "testing";
+
 }
+
+/**
+ * Implements hook_form_submit (If this were drupal 6. I code in a TIME MACHINE).
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function fakermaker_form_field_config_edit_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $varz = "onetwothree";
+
+ $generation_pattern = $form_state->getValue(array('fakermaker_value', 'generation'));;
+  // @todo validate token.
+  $entity = $form_state->getFormObject()->getEntity();
+  $field_name = $entity->id();
+  \Drupal::logger(' mymodule')->notice('mymodule submit ') ;
+
+  // SOOO, gotta move this, BUT.
+  // 1. check to see if this field has a config entity probably.
+// @todo - the machine name should be the FIELD NAME not the label.
+  // THE LABEL should be the same as the NAME OF THE FIELD INSTANCE. OHHH.
+
+
+  // then load it if so
+
+  // then save it's new pattern
+
+  // then party.
+
+
+
+}
+
 
 
 /**
-http://drupal.stackexchange.com/questions/176314/how-to-add-a-simple-checkbox-in-field-api
- */
-// wut doez this do?!
-//http://slides.com/dolaresko/d8-field-api
-function fakermaker_entity_base_field_info(EntityTypeInterface $entity_type) {
-  // @todo: Make this configurable and/or remove if
-  //   https://drupal.org/node/476294 is resolved.
-//  if ($entity_type->id() === 'node') {
-//    $fields['fakermaker'] = BaseFieldDefinition::create('fakermaker')
-//      ->setCustomStorage(TRUE)
-//      ->setLabel(t('FAKER MAKER TESTING.'))
-//      ->setTranslatable(TRUE)
-//      ->setComputed(TRUE)
-//      ->setDisplayOptions('form', array(
-//        'type' => 'path',
-//        'weight' => 30,
-//      ))
-//      ->setDisplayConfigurable('form', TRUE);
-//
-//    return $fields;
-//  }
-}
+ * Validate a form element that should have tokens in it.
+ *
+ * Form elements that want to add this validation should have the #token_types
+ * parameter defined.
+ *
+ * For example:
+ * @code
+ * $form['my_node_text_element'] = array(
+ *   '#type' => 'textfield',
+ *   '#title' => t('Some text to token-ize that has a node context.'),
+ *   '#default_value' => 'The title of this node is [node:title].',
+ *   '#element_validate' => array('token_element_validate'),
+ *   '#token_types' => array('node'),
+ *   '#min_tokens' => 1,
+ *   '#max_tokens' => 10,
+ * );
+ * @endcode
+ *
+token_element_validate
 
-
+ * */

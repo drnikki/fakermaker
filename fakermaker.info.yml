@@ -4,3 +4,6 @@ description: 'Sensible dummy data generation.'
 version: VERSION
 core: 8.x
 package: Core
+dependencies:
+- ctools
+- token

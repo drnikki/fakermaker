@@ -21,10 +21,13 @@ class PatternForm extends EntityForm {
     $pattern = $this->entity;
     $form['label'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Label'),
+      '#title' => $this->t('name of field'),
+      // @todo - are we going to hit maxlength on this shit?
+      // what is max length of a field's machine name?
+      // HEY- IF WE HAVE REPEATED FIELDS, THEY SHOULD PROBZ USE THE SAME GENERATION SETTINGS, RIGHT?
       '#maxlength' => 255,
       '#default_value' => $pattern->label(),
-      '#description' => $this->t("Label for the Pattern."),
+      '#description' => $this->t("machine name of the field for the Pattern."),
       '#required' => TRUE,
     );
 

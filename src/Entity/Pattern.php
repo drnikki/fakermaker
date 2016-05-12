@@ -55,7 +55,7 @@ class Pattern extends ConfigEntityBase implements PatternInterface {
    */
   protected $field;
 
-
+ //  @TODO - KILL THIS
   public function getField() {
     return $this->field;
   }
