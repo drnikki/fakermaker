@@ -71,27 +71,5 @@ function fakermaker_form_field_config_edit_form_submit($form, \Drupal\Core\Form\
 
 }
 
-
-
-/**
- * Validate a form element that should have tokens in it.
- *
- * Form elements that want to add this validation should have the #token_types
- * parameter defined.
- *
- * For example:
- * @code
- * $form['my_node_text_element'] = array(
- *   '#type' => 'textfield',
- *   '#title' => t('Some text to token-ize that has a node context.'),
- *   '#default_value' => 'The title of this node is [node:title].',
- *   '#element_validate' => array('token_element_validate'),
- *   '#token_types' => array('node'),
- *   '#min_tokens' => 1,
- *   '#max_tokens' => 10,
- * );
- * @endcode
- *
-token_element_validate
-
- * */
+// for responding to entity update events
+//function fakermaker_entity_update() {}

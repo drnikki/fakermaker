@@ -7,5 +7,8 @@ FakerMaker is a tool that provides field-level control of dummy data generated f
 and steal the machine name then so that for every field that's created,
 a corresponding config entry is created
 - respond to deletion events also.
-- install faker w/composer
 - turn composer methods into tokens
+
+- add field-type settings form for patterns for fields without generation patterns.
+- add drush command
+ -- 

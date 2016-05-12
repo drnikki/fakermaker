@@ -49,7 +49,7 @@ class Pattern extends ConfigEntityBase implements PatternInterface {
   protected $label;
 
   /**
-   * The Pattern field.
+   * The Pattern field's .
    *
    * @var string
    */
