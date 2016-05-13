@@ -3,8 +3,11 @@
 
 namespace Drupal\fakermaker\Form;
 
+use Drupal\Core\Entity\Entity;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
 
 class FakerMakerSettingsForm extends ConfigFormBase {
 
@@ -28,23 +31,48 @@ class FakerMakerSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
+    // @todo - add to constructor
 
     $config = $this->config('fakermaker.settings');
-
     // Some rudimentary fieldsets
     $form['basic'] = array();
+    $form['#tree'] = TRUE;
 
-    $form['basic']['fm_do_something'] = array(
-      '#type' => 'checkbox',
-      '#title' => $this->t('Do something?'),
-      '#default_value' => $config->get('fm.do.something'),
-    );
+    //    $contentTypes = $em->getStorage('node_type')->loadMultiple();
+    $efm = \Drupal::service('entity_field.manager');
+    $em = \Drupal::service('entity.manager'); //? is field manager accessible through entity manger
+    $contentTypes = $em->getStorage('node_type')->loadMultiple();
+    foreach ($contentTypes as $contentType) {
+      $b=1;
+      $fields = $efm->getFieldDefinitions('node', $contentType->id());
 
-    $form['advanced'] = array(
-      '#type' => 'details',
-      '#title' => $this->t('Advanced settings'),
-      '#open' => TRUE,
-    );
+      // to be generalized
+      $do_not_want = array ('nid', 'uuid', 'vid', 'langcode', 'type', 'uid', 'created', 'changed', 'revision_timestamp', 'revision_uid', 'revision_log', 'revision_translation_affected', 'default_langcode', 'path');
+
+      $new_keys = array_diff(array_keys($fields), $do_not_want);
+
+
+      $form[$contentType->id()] = array(
+        '#type' => 'details',
+        '#title' => $this->t($contentType->id()),
+        '#open' => TRUE,
+      );
+      // for each field
+      foreach ($new_keys as $field_name) {
+
+        $form[$contentType->id()][$field_name] = array(
+          '#type' => 'textfield',
+          '#title' => $this->t($field_name),
+          //'#default_value' => $config->get('fm.do.something'),
+        );
+
+
+
+        $test = 'test';
+      }
+
+
+    }
 
     $form['advanced']['fm_image_server'] = array(
       '#type' => 'checkbox',
@@ -60,10 +88,21 @@ class FakerMakerSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('fakermaker.settings')
-      ->set('fm.do.something', $form_state->getValue('fm_do_something'))
-      ->set('fm.image_server', $form_state->getValue('fm_image_server'))
-      ->save();
+
+    $test = '';
+    $config = $this->config('fakermaker.settings');
+    $config->save();
+
+    $values = $form_state->getValues();
+    // each ct
+    foreach ($values as $contentType => $fields) {
+      // each field in the ct
+      foreach($fields as $fieldname => $value) {
+        $config->set($fieldname, $value);
+
+      }
+
+    }
 
     parent::submitForm($form, $form_state);
   }
