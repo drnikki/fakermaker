@@ -39,48 +39,39 @@ class FakerMakerSettingsForm extends ConfigFormBase {
     $form['basic'] = array();
     $form['#tree'] = TRUE;
 
-    //    $contentTypes = $em->getStorage('node_type')->loadMultiple();
     $efm = \Drupal::service('entity_field.manager');
     $em = \Drupal::service('entity.manager'); //? is field manager accessible through entity manger
     $contentTypes = $em->getStorage('node_type')->loadMultiple();
+    // Iterate over each content type.
     foreach ($contentTypes as $contentType) {
       $contentTypeID = $contentType->id();
-      $b=1;
+      // Get *all* the fields on the content type.
       $fields = $efm->getFieldDefinitions('node', $contentType->id());
-
-      // to be generalized
+      // Make a list of fields for which we won't generate dummy content.
+      // @todo should be somewhere configurable or otherwise better.
       $do_not_want = array ('nid', 'uuid', 'vid', 'langcode', 'type', 'uid', 'created', 'changed', 'revision_timestamp', 'revision_uid', 'revision_log', 'revision_translation_affected', 'default_langcode', 'path');
-
+      // the list of fields is keyed by content type.
+      // Remove the ones we don't want.
       $new_keys = array_diff(array_keys($fields), $do_not_want);
-
-
+      // Make a fieldset for each content type, identified by it's name.
       $form[$contentType->id()] = array(
         '#type' => 'details',
         '#title' => $this->t($contentType->id()),
         '#open' => TRUE,
       );
-      // for each field
+      // Iterate over each field in the content type.
       foreach ($new_keys as $field_name) {
-
+        // @todo - make this describe also the *type* of field it is for people.
         $form[$contentType->id()][$field_name] = array(
           '#type' => 'textfield',
           '#title' => $this->t($field_name),
           '#default_value' => $config->get($contentTypeID . '.' . $field_name),
         );
-
-
-
-        $test = 'test';
       }
-
-
     }
 
-    $form['advanced']['fm_image_server'] = array(
-      '#type' => 'checkbox',
-      '#title' => $this->t('Use default lorem server'),
-      '#default_value' => $config->get('fm.image_server'),
-    );
+    $config = \Drupal::config('fakermaker.settings');
+
 
     return parent::buildForm($form, $form_state);
   }
@@ -91,19 +82,18 @@ class FakerMakerSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    $test = '';
     $config = $this->config('fakermaker.settings');
 
     $values = $form_state->getValues();
-    // each ct
+    // It's an associative array!
     foreach ($values as $contentType => $fields) {
-      // each field in the ct
+      // Iterate over reach field in the content type.
       foreach($fields as $fieldname => $value) {
+        // SAVE IT!
         $config->set($contentType . '.' . $fieldname, $value);
-
       }
-
     }
+
     $config->save();
 
     parent::submitForm($form, $form_state);
