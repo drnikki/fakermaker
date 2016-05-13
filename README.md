@@ -11,4 +11,5 @@ a corresponding config entry is created
 
 - add field-type settings form for patterns for fields without generation patterns.
 - add drush command
- -- 
+
+- need special handling for reused body and title fields / prepend with content type name is probably simplest.

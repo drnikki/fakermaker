@@ -23,6 +23,7 @@ class FakerMakerSettingsForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     // @todo wut does this do?!
+    // @todo - I think we need one of these for ERRY content type.
     return ['fakermaker.settings'];
   }
 
@@ -43,6 +44,7 @@ class FakerMakerSettingsForm extends ConfigFormBase {
     $em = \Drupal::service('entity.manager'); //? is field manager accessible through entity manger
     $contentTypes = $em->getStorage('node_type')->loadMultiple();
     foreach ($contentTypes as $contentType) {
+      $contentTypeID = $contentType->id();
       $b=1;
       $fields = $efm->getFieldDefinitions('node', $contentType->id());
 
@@ -63,7 +65,7 @@ class FakerMakerSettingsForm extends ConfigFormBase {
         $form[$contentType->id()][$field_name] = array(
           '#type' => 'textfield',
           '#title' => $this->t($field_name),
-          //'#default_value' => $config->get('fm.do.something'),
+          '#default_value' => $config->get($contentTypeID . '.' . $field_name),
         );
 
 
@@ -91,18 +93,18 @@ class FakerMakerSettingsForm extends ConfigFormBase {
 
     $test = '';
     $config = $this->config('fakermaker.settings');
-    $config->save();
 
     $values = $form_state->getValues();
     // each ct
     foreach ($values as $contentType => $fields) {
       // each field in the ct
       foreach($fields as $fieldname => $value) {
-        $config->set($fieldname, $value);
+        $config->set($contentType . '.' . $fieldname, $value);
 
       }
 
     }
+    $config->save();
 
     parent::submitForm($form, $form_state);
   }
