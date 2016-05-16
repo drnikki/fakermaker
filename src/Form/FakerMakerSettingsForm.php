@@ -70,7 +70,7 @@ class FakerMakerSettingsForm extends ConfigFormBase {
       }
     }
 
-    $config = \Drupal::config('fakermaker.settings');
+
 
 
     return parent::buildForm($form, $form_state);

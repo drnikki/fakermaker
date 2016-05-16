@@ -7,6 +7,7 @@
 
 use \Drupal\core\Entity\EntityTypeInterface;
 use \Drupal\core\Field\BaseFieldDefinition;
+use \Faker\Factory;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -72,4 +73,11 @@ function fakermaker_form_field_config_edit_form_submit($form, \Drupal\Core\Form\
 }
 
 // for responding to entity update events
-//function fakermaker_entity_update() {}
+function fakermaker_token_info() {
+  // use \Faker\Factory;
+  $faker = Faker\Factory::create();
+
+  $test = get_class_methods($faker);
+
+
+}
