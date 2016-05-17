@@ -19,6 +19,10 @@ class TestingController extends ControllerBase {
     // need that field manager.
     $efm = \Drupal::service('entity_field.manager');
 
+    // dummy images for some stuff
+    $data = file_get_contents('http://lorempixel.com/400/200/sports/1/Dummy-Text/');
+    $blog_img = file_save_data($data, 'public://blog-hero-new.png', FILE_EXISTS_REPLACE);
+
     //  we'll need this at some point
   //  $faker = Faker\Factory::create();
 
@@ -62,6 +66,7 @@ class TestingController extends ControllerBase {
             'type' => $contentType,
             'langcode' => 'en', // @todo
             'uid' => '1',
+            'title' => 'foo',
         ));
 
         /**
@@ -76,38 +81,33 @@ class TestingController extends ControllerBase {
          * and then manually add back title and langcode. @todo.
          */
         foreach($pattern_fields as $fieldName => $pattern) {
+          // @todo - need to grab either the 'default value' or
+          // for now, put a set value in there so shit doesn't go empty.
+
           // do a check to see what kind of field it is, in the field definitions array
-          if ($fieldDefintions[$fieldName]->getFieldType() == 'text_long'){
+          // which is an array of field objects, keyed by field name
+          $fieldType = $fieldDefintions[$fieldName]->getType();
+          if ($fieldType == 'text_long' ||
+              $fieldType == 'text_with_summary' ||
+              $fieldType == 'boolean') {
+            $foo = $fieldName;
             // or otherk ind of text field, we can attach it to the node here.
+            // Use variable name as field name here
+            $node->${$fieldName} = array('value' => $pattern);
           }
-        }
+          // push image data into the node too.
+          if ($fieldType == 'image') {
+            $node->${$fieldName} =  array(
+                'target_id' => $blog_img->id(),
+                'alt' => 'alt text for additional image'
+              );
+          }
 
+          }
 
+        $node->save();
         $tst = 'test.com';
-        // for now, let's make one of each ok!
-        //$node = Node::create(array(
-        // fields common to every content type.
-        //        'type' => 'blog',
-        //        'title' => 'blog ' . $faker->sentence(2),
-        //        'langcode' => 'en',
-        //        'uid' => '1',
-        //        'field_blog_author' => array('value' => $faker->name),
-        //        'field_blog_body' => array('value' => $faker->text(500)),
-        //        'field_blog_date' => array('value' => _mjd_generate_rand_date()),
-        //        'field_blog_image' =>  array(
-        //          'target_id' => $blog_img->id(),
-        //          'alt' => 'alt text for additional image'
-        //        ),
-        //        'field_blog_tags' => array('target_id' => $blog_tid), // @todo, faker random dates
-        //        'field_ref_blog_cities' => array('target_id' => $city),
-        //        'field_ref_blog_center' => array('target_id' => $center_nid),
-        //        'field_ref_blog_associated_person' => array('target_id' => $person_nid),
-        //        'field_ref_blog_research_areas' => array('target_id' => $research_areas),
-        //        'field_ref_associated_program' => array('target_id' => $program_nid),
-        //        // Tag the blogs with homepage categories so we have hp content
-        //        'field_blog_homepage_category' => array('target_id' => $homepage_tid),
 
-        //     ));
         $dosomething = 'test';
 
       }
