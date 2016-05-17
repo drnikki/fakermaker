@@ -88,22 +88,26 @@ class TestingController extends ControllerBase {
           // which is an array of field objects, keyed by field name
           $fieldType = $fieldDefintions[$fieldName]->getType();
           if ($fieldType == 'text_long' ||
-              $fieldType == 'text_with_summary' ||
-              $fieldType == 'boolean') {
+              $fieldType == 'text_with_summary') {
             $foo = $fieldName;
-            // or otherk ind of text field, we can attach it to the node here.
+            // or other kind of text field, we can attach it to the node here.
             // Use variable name as field name here
-            $node->${$fieldName} = array('value' => $pattern);
+            $node->{$fieldName} = array('value' => $pattern);
           }
           // push image data into the node too.
           if ($fieldType == 'image') {
-            $node->${$fieldName} =  array(
+            $node->{$fieldName} =  array(
                 'target_id' => $blog_img->id(),
                 'alt' => 'alt text for additional image'
               );
           }
 
+          // push image data into the node too.
+          if ($fieldType == 'integer' || $fieldType == 'boolean') {
+            $node->{$fieldName} =  $pattern;
           }
+
+        } // end of foreach
 
         $node->save();
         $tst = 'test.com';

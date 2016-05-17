@@ -11,6 +11,7 @@ use \Faker\Factory;
 
 /**
  * Implements hook_form_FORM_ID_alter().
+ * @todo cut
  */
 function fakermaker_form_field_config_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   if ($form_id == 'field_config_edit_form') {
@@ -43,18 +44,17 @@ function fakermaker_form_field_config_edit_form_alter(&$form, \Drupal\Core\Form\
 
 /**
  * Implements hook_form_submit (If this were drupal 6. I code in a TIME MACHINE).
- *
+ * DO NOT NEED
  * @param $form
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  */
 function fakermaker_form_field_config_edit_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  $varz = "onetwothree";
 
  $generation_pattern = $form_state->getValue(array('fakermaker_value', 'generation'));;
   // @todo validate token.
   $entity = $form_state->getFormObject()->getEntity();
   $field_name = $entity->id();
-  \Drupal::logger(' mymodule')->notice('mymodule submit ') ;
+  \Drupal::logger(' fakermaker')->notice('mymodule submit ') ;
 
   // SOOO, gotta move this, BUT.
   // 1. check to see if this field has a config entity probably.
@@ -67,8 +67,6 @@ function fakermaker_form_field_config_edit_form_submit($form, \Drupal\Core\Form\
   // then save it's new pattern
 
   // then party.
-
-
 
 }
 
