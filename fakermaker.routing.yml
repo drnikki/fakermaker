@@ -6,7 +6,29 @@ fakermaker.settings_global:
   requirements:
     _permission: 'administer fakermaker'
 
+# rename me plz
+fakermaker.settings_ct:
+  path: '/admin/config/fakermaker/pattern/{entity_type}'
+  defaults:
+    _form: '\Drupal\fakermaker\Form\FakerMakerContentTypeSettingsForm'
+    _title: 'Fakermaker settings'
+  requirements:
+    _permission: 'administer fakermaker'
+  options:
+    parameters:
+      entity_type:
+        type: entity:entity_type
 
+
+fakermaker.test:
+  path: '/fm-test'
+  defaults:
+    _controller: '\Drupal\fakermaker\Controller\TestingController::generate_test'
+  requirements:
+    _permission: 'access content'
+
+
+# junk from the entity that we're probably going to get rid of.
 entity.pattern.delete_form:
   path: '/admin/config/pattern/manage/{pattern}/delete'
   defaults:
@@ -38,10 +60,3 @@ entity.pattern.collection:
     _title: 'FakerMaker Patterns'
   requirements:
     _permission: 'administer fakermaker'
-
-fakermaker.test:
-  path: '/fm-test'
-  defaults:
-    _controller: '\Drupal\fakermaker\Controller\TestingController::generate_test'
-  requirements:
-    _permission: 'access content'

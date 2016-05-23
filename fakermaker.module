@@ -9,71 +9,14 @@ use \Drupal\core\Entity\EntityTypeInterface;
 use \Drupal\core\Field\BaseFieldDefinition;
 use \Faker\Factory;
 
-/**
- * Implements hook_form_FORM_ID_alter().
- * @todo cut
- */
-function fakermaker_form_field_config_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'field_config_edit_form') {
-    // copied from /core/modules/field_ui/src/Form/FieldConfigEditForm.php
-    // in form context, can get default value here.
-    $form['fakermaker_value'] =  array(
-      '#type' => 'details',
-      '#title' => t('Default generation value'),
-      '#open' => TRUE,
-      '#tree' => TRUE,
-      '#description' => t('The default value for generating new content during generation. Generation. Generation.'),
-    );
 
-    $form['fakermaker_value']['generation'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Generator text'),
-      '#default_value' => 'lorem ipsum', // @todo, load from the existing settings value.
-      '#rows' => 5,
-      '#description' => t('here are some details about how this works'),
-      '#weight' => -10,
-    );
-
-    $form['actions']['submit']['#submit'][] = 'fakermaker_form_field_config_edit_form_submit';
-    // need a validate one to validate the integrity of the tokenz.
-    //$form['actions']['submit']['#submit'][] = 'fakermaker_form_submit';
-
-  }
-
-}
-
-/**
- * Implements hook_form_submit (If this were drupal 6. I code in a TIME MACHINE).
- * DO NOT NEED
- * @param $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- */
-function fakermaker_form_field_config_edit_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-
- $generation_pattern = $form_state->getValue(array('fakermaker_value', 'generation'));;
-  // @todo validate token.
-  $entity = $form_state->getFormObject()->getEntity();
-  $field_name = $entity->id();
-  \Drupal::logger(' fakermaker')->notice('mymodule submit ') ;
-
-  // SOOO, gotta move this, BUT.
-  // 1. check to see if this field has a config entity probably.
-// @todo - the machine name should be the FIELD NAME not the label.
-  // THE LABEL should be the same as the NAME OF THE FIELD INSTANCE. OHHH.
-
-
-  // then load it if so
-
-  // then save it's new pattern
-
-  // then party.
-
-}
 
 // for responding to entity update events
 function fakermaker_token_info() {
   // use \Faker\Factory;
-  $faker = Faker\Factory::create();
+  $faker = \Faker\Factory::create();
+
+  echo 'test';
 
   $test = get_class_methods($faker);
 

@@ -109,9 +109,10 @@ class TestingController extends ControllerBase {
 
         } // end of foreach
 
+          $node->set('body', 'valuez');
         $node->save();
         $tst = 'test.com';
-
+        // @todo - see how devel generate and drupal console do this.
         $dosomething = 'test';
 
       }
