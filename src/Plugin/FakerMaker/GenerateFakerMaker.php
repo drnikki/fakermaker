@@ -48,7 +48,21 @@ class GenerateFakerMaker extends FakerMakerBase implements ContainerFactoryPlugi
 
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $types = $this->nodeTypeStorage->loadMultiple();
-ksm($this->nodeTypeStorage);
+
+    foreach ($types as $type) {
+      $name = strtolower($type->get('type'));
+      $config = \Drupal::service('config.factory')->getEditable('fakermaker.settings');
+      $enabled = $config->get("settings.$name.enabled");
+      $weight = $config->get("settings.$name.weight");
+
+      $rows[$enabled ? 'enabled' : 'disabled'][$name] = array(
+        'label' => $type->get('name'),
+        'entity_id' => $name,
+        'weight' => $weight,
+      );
+
+    }
+
     $form['fakermaker_table'] = array(
       '#type' => 'table',
       '#header' => array(
@@ -58,21 +72,80 @@ ksm($this->nodeTypeStorage);
         $this->t('Weight'),
         $this->t('Operations'),
       ),
-      '#tabledrag' => array(
-        array(
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'fakermaker-order-weight',
-        ),
-      ),
+    );
+    $regions = array(
+      'enabled' => 'enabled',
+      'disabled' => 'disabled'
     );
 
-    foreach ($types as $type) {
-      ksm($type);
-      ksm($type->get('name'));
+    foreach ($regions as $region => $label) {
+      // setup the table for tabledrag
+      $form['fakermaker_table']['#tabledrag'][] = array(
+        'action' => 'match',
+        'relationship' => 'sibling',
+        'region' => 'fakermaker-region-select',
+        'subregion' => 'fakermaker-region-' . $region,
+        'hidden' => FALSE,
+      );
+      $form['fakermaker_table']['#tabledrag'][] = array(
+        'action' => 'order',
+        'relationship' => 'sibling',
+        'region' => 'fakermaker-weight',
+        'subregion' => 'fakermaker-weight-' . $region,
+      );
+      // create the region for placement
+      $form['fakermaker_table']['region-' . $region] = array(
+        '#attributes' => array(
+          'class' => array('region-title', 'region-title-' . $region),
+          'no_striping' => TRUE,
+        ),
+      );
+      $form['fakermaker_table']['region-' . $region]['title'] = array(
+        '#markup' => ucwords($region),
+        '#wrapper_attributes' => array(
+          'colspan' => 5,
+        ),
+      );
+      // add a message if the region is empty. politeness
+      $form['fakermaker_table']['region-' . $region . '-message'] = array(
+        '#attributes' => array(
+          'class' => array(
+            'region-message',
+            'region-' . $region . '-message',
+            empty($rows[$region]) ? 'region-empty' : 'region-populated',
+          ),
+        ),
+      );
+      $form['fakermaker_table']['region-' . $region . '-message']['message'] = array(
+        '#markup' => '<em>' . $this->t('No blocks in this region') . '</em>',
+        '#wrapper_attributes' => array(
+          'colspan' => 5,
+        ),
+      );
+      // add the rows
+      if (isset($rows[$region])) {
+        foreach ($rows[$region] as $row) {
+          $entity_name = $row['label'];
+
+          $form['fakermaker_table'][$entity_name] = array(
+            '#attributes' => array(
+              'class' => array('draggable'),
+            ),
+          );
+          $form['fakermaker_table'][$entity_name]['info'] = array(
+            '#plain_text' => $row['label'],
+            '#wrapper_attributes' => array(
+              'class' => array('fakermaker'),
+            ),
+          );
+
+
+        }
+      }
+
+
     }
 
-    ksm($form);
     return $form;
   }
 

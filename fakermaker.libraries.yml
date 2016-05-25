@@ -1,0 +1,10 @@
+fakermaker:
+  version: VERSION
+  css:
+    theme:
+      css/fakermaker.css: {}
+  js:
+    js/fakermaker.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
