@@ -4,21 +4,3 @@
  * @file
  * Functions for fakermaker.
  */
-
-use \Drupal\core\Entity\EntityTypeInterface;
-use \Drupal\core\Field\BaseFieldDefinition;
-use \Faker\Factory;
-
-
-
-// for responding to entity update events
-function fakermaker_token_info() {
-  // use \Faker\Factory;
-  $faker = \Faker\Factory::create();
-
-  echo 'test';
-
-  $test = get_class_methods($faker);
-
-
-}

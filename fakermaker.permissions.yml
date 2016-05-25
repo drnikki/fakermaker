@@ -1,0 +1,10 @@
+administer fakermaker:
+  title: 'Administer FakerMaker'
+  description: 'Allows user to administer FakerMaker settings.'
+
+generate fakermaker data:
+  title: 'Generate FakerMaker Content'
+  description: 'Allows user to generate FakerMaker content.'
+
+permission_callbacks:
+  - \Drupal\fakermaker\FakerMakerPermissions::permissions

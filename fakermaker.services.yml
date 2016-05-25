@@ -1,0 +1,4 @@
+services:
+  plugin.manager.fakermaker:
+    class: Drupal\fakermaker\FakerMakerPluginManager
+    parent: default_plugin_manager

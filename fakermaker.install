@@ -1,0 +1,73 @@
+<?php
+
+/*
+ * Implements hook_schema().
+ */
+function fakermaker_schema() {
+  $schema = array();
+
+  $schema['fakermaker'] = array(
+    'description' => 'FakerMaker base table.',
+    'fields' => array(
+      'entity_id' => array(
+        'description' => 'The primary entity identifier.',
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE
+      ),
+      'uuid' => array(
+        'description' => 'The unique entity identifier.',
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE
+      ),
+      // Defaults to NULL in order to avoid a brief period of potential
+      // deadlocks on the index.
+      'nid' => array(
+        'description' => 'The generated node identifier.',
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        'default' => NULL
+      ),
+      'bundle' => array(
+        'description' => 'The type of this entity.',
+        'type' => 'varchar',
+        'length' => 48,
+        'not null' => TRUE
+      )
+    ),
+    'primary key' => array('entity_id'),
+    'unique keys' => array(
+      'uuid' => array('uuid'),
+      'nid' => array('nid')
+    )
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ *
+ * TODO: there must be a better way ...
+ */
+function fakermaker_install() {
+  \Drupal::service('config.factory')->getEditable('fakermaker.settings')->save();
+  \Drupal::service('config.factory')->getEditable('fakermaker.type.article')->save();
+  \Drupal::service('config.factory')->getEditable('fakermaker.type.page')->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * TODO: there must be a better way ...
+ */
+function fakermaker_uninstall() {
+  \Drupal::service('config.factory')->getEditable('fakermaker.settings')->delete();
+  \Drupal::service('config.factory')->getEditable('fakermaker.type.article')->delete();
+  \Drupal::service('config.factory')->getEditable('fakermaker.type.page')->delete();
+
+  drupal_uninstall_schema('fakermaker');
+}

@@ -1,5 +1,0 @@
-fakermaker.pattern_add:
-  route_name: 'fakermaker.pattern_add'
-  title: 'Add Pattern'
-  appears_on:
-    - entity.pattern.collection

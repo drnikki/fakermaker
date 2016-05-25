@@ -1,0 +1,8 @@
+langcode: en
+settings:
+  article:
+    enabled: true
+    weight: 0
+  page:
+    enabled: true
+    weight: 1

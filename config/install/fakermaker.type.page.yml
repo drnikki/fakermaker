@@ -1,0 +1,10 @@
+type: page
+fields:
+  body:
+    provider:
+      type: Text
+      lang: en_US
+      settings:
+        type: realText
+        maxNbChars: 200
+        indexSize: 2

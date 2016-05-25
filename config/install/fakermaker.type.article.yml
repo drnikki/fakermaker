@@ -1,0 +1,30 @@
+type: article
+fields:
+  body:
+    provider:
+      type: Text
+      lang: en_US
+      settings:
+        type: realText
+        maxNbChars: 200
+        indexSize: 2
+  field_image:
+    provider:
+      type: Image
+      settings:
+        width: 640
+        height: 480
+        category: ~
+        randomize: 1
+        word: ~
+        gray: 0
+  field_tags:
+    provider:
+      type: Text
+      lang: en_US
+      settings:
+        type: realText
+        maxNbChars: 200
+        indexSize: 2
+    dependencies:
+      - taxonomy/tags
