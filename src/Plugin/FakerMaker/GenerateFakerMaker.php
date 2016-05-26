@@ -5,6 +5,8 @@
  */
 
 namespace Drupal\fakermaker\Plugin\FakerMaker;
+use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\fakermaker\FakerMakerBase;
@@ -50,18 +52,22 @@ class GenerateFakerMaker extends FakerMakerBase implements ContainerFactoryPlugi
     $types = $this->nodeTypeStorage->loadMultiple();
 
     foreach ($types as $type) {
-      $name = strtolower($type->get('type'));
+      $entity_type = $type->get('type');
       $config = \Drupal::service('config.factory')->getEditable('fakermaker.settings');
-      $enabled = $config->get("settings.$name.enabled");
-      $weight = $config->get("settings.$name.weight");
+      $enabled = $config->get("settings.$entity_type.enabled");
+      $weight = $config->get("settings.$entity_type.weight");
 
-      $rows[$enabled ? 'enabled' : 'disabled'][$name] = array(
+      $rows[$enabled ? 'enabled' : 'disabled'][$entity_type] = array(
         'label' => $type->get('name'),
-        'entity_id' => $name,
+        'entity_id' => $entity_type,
         'weight' => $weight,
+        'entity' => $type,
       );
-
     }
+
+    // set the weight delta of the weight type form element to be at least half the
+    // number of $types to account for the the delta range being from -int to +int
+    $weight_delta = round(count($types) / 2);
 
     $form['fakermaker_table'] = array(
       '#type' => 'table',
@@ -71,6 +77,17 @@ class GenerateFakerMaker extends FakerMakerBase implements ContainerFactoryPlugi
         $this->t('Field List'),
         $this->t('Weight'),
         $this->t('Operations'),
+      ),
+      '#attached' => array(
+        'library' => array(
+          'core/drupal.tableheader',
+          'fakermaker/fakermaker'
+        ),
+      ),
+      '#attributes' => array(
+        'class' => array(
+          'clearfix',
+        ),
       ),
     );
     $regions = array(
@@ -122,28 +139,76 @@ class GenerateFakerMaker extends FakerMakerBase implements ContainerFactoryPlugi
           'colspan' => 5,
         ),
       );
+
       // add the rows
       if (isset($rows[$region])) {
-        foreach ($rows[$region] as $row) {
-          $entity_name = $row['label'];
+        foreach ($rows[$region] as $info) {
+          $entity_id = $info['entity_id'];
+          $entity = $info['entity'];
 
-          $form['fakermaker_table'][$entity_name] = array(
+          $form['fakermaker_table'][$entity_id] = array(
             '#attributes' => array(
               'class' => array('draggable'),
             ),
           );
-          $form['fakermaker_table'][$entity_name]['info'] = array(
-            '#plain_text' => $row['label'],
+          $form['fakermaker_table'][$entity_id]['info'] = array(
+            '#plain_text' => $info['label'],
             '#wrapper_attributes' => array(
               'class' => array('fakermaker'),
             ),
           );
+          $form['fakermaker_table'][$entity_id]['type'] = array(
+            '#markup' => $info['entity_id'],
+          );
 
+          $field_list = array();
+          $fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $info['entity_id']);
+
+          foreach ($fields as $delta => $field) {
+            if (method_exists($field, 'getEntityTypeId')) {
+              if ( $field->get('entityTypeId') === 'field_config' ) {
+                $field_list[] = $delta;
+              }
+            }
+          }
+
+          $form['fakermaker_table'][$entity_id]['fields'] = array(
+            '#markup' => implode(', ', $field_list),
+          );
+
+          $form['fakermaker_table'][$entity_id]['weight'] = array(
+            '#type' => 'weight',
+            '#default_value' => $info['weight'],
+            '#delta' => $weight_delta,
+            '#title' => $this->t('Weight for @row entity', array('@row' => $info['label'])),
+            '#title_display' => 'invisible',
+            '#attributes' => array(
+              'class' => array('fakermaker-weight', 'fakermaker-weight-' . $region),
+            ),
+          );
+
+          $account = \Drupal::currentUser();
+          if ($account->hasPermission('administer node fields')) {
+            $manage_fields = array(
+              'title' => t('Manage fields'),
+              'weight' => 15,
+              'url' => Url::fromRoute("entity.node.field_ui_fields", array(
+                $entity->getEntityTypeId() => $entity->id(),
+              )),
+            );
+
+            $form['fakermaker_table'][$entity_id]['actions'] = array(
+              '#type' => 'dropbutton',
+              '#links' => array(
+                'manage_fields' =>$manage_fields,
+              ),
+            );
+          }
+
+          // add enable/disable link based on stored value
 
         }
       }
-
-
     }
 
     return $form;
