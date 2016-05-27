@@ -95,15 +95,15 @@ class FakerMakerSettingsForm extends ConfigFormBase {
       $form['fakermaker']['#tabledrag'][] = array(
         'action' => 'match',
         'relationship' => 'sibling',
-        'region' => 'fakermaker-region-select',
-        'subregion' => 'fakermaker-region-' . $region,
+        'group' => 'fakermaker-region-select',
+        'subgroup' => 'fakermaker-region-' . $region,
         'hidden' => FALSE,
       );
       $form['fakermaker']['#tabledrag'][] = array(
         'action' => 'order',
         'relationship' => 'sibling',
-        'region' => 'fakermaker-weight',
-        'subregion' => 'fakermaker-weight-' . $region,
+        'group' => 'fakermaker-weight',
+        'subgroup' => 'fakermaker-weight-' . $region,
       );
       // create the region for placement
       $form['fakermaker']['region-' . $region] = array(

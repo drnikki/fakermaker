@@ -6,21 +6,6 @@
 (function ($, window, Drupal) {
 
   'use strict';
-// TODO: make this better
-    Drupal.behaviors.fakermakerHideWeight = {
-      attach: function (context, settings) {
-        // tableDrag is required and we should be on the fakermakers admin page.
-        if (typeof Drupal.tableDrag === 'undefined' || typeof Drupal.tableDrag.fakermaker === 'undefined') {
-          return;
-        }
-
-        $('#fakermaker')
-          .find('thead > tr > th:nth-child(5)').addClass('tabledrag-hide').css('display', 'none');
-        $('#fakermaker')
-          .find('tbody > tr > td:nth-child(5)').addClass('tabledrag-hide').css('display', 'none');
-
-      }
-    }
 
   /**
    * Move a row in the settings table between regions via select list.
