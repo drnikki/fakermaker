@@ -1,8 +1,10 @@
 langcode: en
 settings:
   article:
-    enabled: true
+    name: Article
+    status: enabled
     weight: 0
   page:
-    enabled: true
+    name: Basic Page
+    status: enabled
     weight: 1

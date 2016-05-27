@@ -30,7 +30,7 @@ class FakerMakerRoutes implements ContainerInjectionInterface {
       $label = $plugin['label'];
       $type_url_str = str_replace('_', '-', $plugin['url']);
       $routes["fakermaker.$id"] = new Route(
-        "admin/config/development/fakermaker/$type_url_str",
+        "/admin/config/development/fakermaker/$type_url_str",
         array(
           '_form' => '\Drupal\fakermaker\Form\FakerMakerForm',
           '_title' => "FakerMaker: " . ucwords($label),

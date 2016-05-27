@@ -1,0 +1,6 @@
+fakermaker.admin_display:
+  title: 'Faker Maker Settings'
+  parent: system.admin_config_development
+  description: 'Configure which entities use Faker content and the generation order.'
+  route_name: fakermaker.admin_display
+  base_route: fakermaker.admin_display

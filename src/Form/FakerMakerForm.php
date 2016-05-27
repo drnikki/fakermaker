@@ -57,7 +57,8 @@ class FakerMakerForm extends FormBase {
     try {
       $plugin_id = $this->getPluginIdFromRequest();
       $instance = $this->getPluginInstance($plugin_id);
-      $instance->generate($form_state->getValues());
+      //ksm($instance);
+//       $instance->generate($form_state->getValues());
     }
     catch (FakerMakerException $e) {
       $this->logger('FakerMaker', $this->t('FakerMaker failed due to "%error".', array('%error' => $e->getMessage())));

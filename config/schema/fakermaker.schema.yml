@@ -14,9 +14,12 @@ fakermaker.settings:
           type: mapping
           label: 'Article'
           mapping:
-            enabled:
-              type: boolean
-              label: 'Faker Enabled for Content Type'
+            name:
+              type: string
+              label: 'Content Type Name'
+            status:
+              type: string
+              label: 'Faker Status for Content Type'
             weight:
               type: integer
               label: 'Generation Order'
@@ -24,9 +27,12 @@ fakermaker.settings:
           type: mapping
           label: 'Page'
           mapping:
-            enabled:
-              type: boolean
-              label: 'Faker Enabled for Content Type'
+            name:
+              type: string
+              label: 'Content Type Name'
+            status:
+              type: string
+              label: 'Faker Status for Content Type'
             weight:
               type: integer
               label: 'Generation Order'

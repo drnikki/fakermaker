@@ -1,2 +1,10 @@
+fakermaker.admin_display:
+  path: 'admin/config/development/fakermaker'
+  defaults:
+    _form: '\Drupal\fakermaker\Form\FakerMakerSettingsForm'
+    _title: 'Faker Maker Settings'
+  requirements:
+    _permission: 'administer fakermaker'
+
 route_callbacks:
   - '\Drupal\fakermaker\Routing\FakerMakerRoutes::routes'

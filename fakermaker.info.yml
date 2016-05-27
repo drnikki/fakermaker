@@ -4,3 +4,4 @@ description: 'Sensible, fake data generation.'
 version: VERSION
 core: 8.x
 package: Development
+configure: fakermaker.admin_display
