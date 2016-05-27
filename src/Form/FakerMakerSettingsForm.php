@@ -45,7 +45,7 @@ class FakerMakerSettingsForm extends ConfigFormBase {
     $rows = array();
 
     $bundles = $entityManager->getBundleInfo('node');
-ksm($config);
+
     foreach ($types as $type => $data) {
       if(!empty($type)) {
         $fields[$type] = array_filter(
