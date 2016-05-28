@@ -2,6 +2,7 @@
 
 namespace Drupal\fakermaker\Form;
 
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\Entity;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -11,12 +12,67 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\node\Entity\Node;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+
 
 /**
   * TODO: dynamic way to initially get all entity types instead of relying on the settings file
   */
 
 class FakerMakerSettingsForm extends ConfigFormBase {
+  /**
+   * The node storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
+   * The node type storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeTypeStorage;
+
+  /**
+   * The node storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $userStorage;
+
+  /**
+   * Constructs a \Drupal\hello\Form\HelloConfigForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactory $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $node_storage
+   *   The node storage.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $node_type_storage
+   *   The node type storage.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
+   *   The user storage.
+   */
+  public function __construct(ConfigFactory $config_factory, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage, EntityStorageInterface $entity_storage) {
+    parent::__construct($config_factory);
+
+    $this->userStorage = $entity_storage;
+    $this->nodeStorage = $node_storage;
+    $this->nodeTypeStorage = $node_type_storage;
+  }
+
+    /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity.manager')->getStorage('node'),
+      $container->get('entity.manager')->getStorage('node_type'),
+      $container->get('entity.manager')->getStorage('user')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -37,22 +93,31 @@ class FakerMakerSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    $entityManager = \Drupal::service('entity.manager');
-
     $config = $this->config('fakermaker.settings');
-    $types = $config->get('settings');
+    $types = array();
+    // Get all the content types, even ones we don't know about yet
+    $types = $this->nodeTypeStorage->loadMultiple();
+//     $types['user'] = array();
+/*
+        $instances = entity_load_multiple_by_properties('field_config', array('entity_type' => 'node', 'bundle' => 'page'));
+ksm($instances);
+ksm(\Drupal::entityManager()->getStorage('field_config')->loadByProperties(array('entity_type' => 'node', 'bundle' => 'page')));
+ksm($this->userStorage);
+*/
+
     $fields = array();
     $rows = array();
 
-    $bundles = $entityManager->getBundleInfo('node');
+//     $bundles = $entityManager->getBundleInfo('node');
 
     foreach ($types as $type => $data) {
       if(!empty($type)) {
         $fields[$type] = array_filter(
-            $entityManager->getFieldDefinitions('node', $type)
+             entity_load_multiple_by_properties('field_config', array('entity_type' => 'node', 'bundle' => $type))
         );
-        $rows[$data['status']][$type] = array(
-          'label' => $bundles[$type]['label'],
+
+        $rows[$config->get("settings.$type.status")][$type] = array(
+          'label' => $data->get('name'),
           'entity_id' => $type,
           'weight' => $config->get("settings.$type.weight"),
           'status' => $config->get("settings.$type.status")
@@ -115,7 +180,7 @@ class FakerMakerSettingsForm extends ConfigFormBase {
       $form['fakermaker']['region-' . $region]['title'] = array(
         '#markup' => ucwords($region),
         '#wrapper_attributes' => array(
-          'colspan' => 5,
+          'colspan' => 6,
         ),
       );
       // add a message if the region is empty. politeness
@@ -131,7 +196,7 @@ class FakerMakerSettingsForm extends ConfigFormBase {
       $form['fakermaker']['region-' . $region . '-message']['message'] = array(
         '#markup' => '<em>' . $this->t('No blocks in this region') . '</em>',
         '#wrapper_attributes' => array(
-          'colspan' => 5,
+          'colspan' => 6,
         ),
       );
 
@@ -160,7 +225,8 @@ class FakerMakerSettingsForm extends ConfigFormBase {
           foreach ($fields[$entity_id] as $delta => $field) {
             if (method_exists($field, 'getEntityTypeId')) {
               if ( $field->get('entityTypeId') === 'field_config' ) {
-                $field_list[] = $delta;
+
+                $field_list[] = t('@label (@type)', array('@label' => $field->get('label'), '@type' => $field->get('field_name')));
               }
             }
           }
