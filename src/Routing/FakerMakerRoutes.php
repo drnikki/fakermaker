@@ -24,7 +24,6 @@ class FakerMakerRoutes implements ContainerInjectionInterface {
 
   public function routes() {
     $fakermaker_plugins = $this->FakerMakerManager->getDefinitions();
-
     $routes = array();
     foreach ($fakermaker_plugins as $id => $plugin) {
       $label = $plugin['label'];
@@ -32,8 +31,8 @@ class FakerMakerRoutes implements ContainerInjectionInterface {
       $routes["fakermaker.$id"] = new Route(
         "/admin/config/development/fakermaker/$type_url_str",
         array(
-          '_form' => '\Drupal\fakermaker\Form\FakerMakerForm',
-          '_title' => "FakerMaker: " . ucwords($label),
+          '_form' => '\Drupal\fakermaker\Form\FakerMakerCreateForm',
+          '_title' => "Faker " . ucwords($label),
           '_plugin_id' => $id,
         ),
         array(

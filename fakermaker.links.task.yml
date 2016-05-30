@@ -1,0 +1,8 @@
+fakermaker.entities:
+  class: \Drupal\Core\Menu\LocalTaskDefault
+  deriver: \Drupal\fakermaker\Plugin\Derivative\FakerMakerLocalTask
+fakermaker.admin_display:
+  title: 'Faker Maker Settings'
+  route_name: fakermaker.admin_display
+  base_route: fakermaker.admin_display
+  weight: 0

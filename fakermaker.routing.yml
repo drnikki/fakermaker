@@ -1,5 +1,5 @@
 fakermaker.admin_display:
-  path: 'admin/config/development/fakermaker'
+  path: '/admin/config/development/fakermaker'
   defaults:
     _form: '\Drupal\fakermaker\Form\FakerMakerSettingsForm'
     _title: 'Faker Maker Settings'
