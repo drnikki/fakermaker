@@ -16,10 +16,10 @@ fakermaker.settings:
           mapping:
             name:
               type: string
-              label: 'Content Type Name'
+              label: 'Entity Type Name'
             status:
               type: string
-              label: 'Faker Status for Content Type'
+              label: 'Faker Status for Entity Type'
             weight:
               type: integer
               label: 'Generation Order'
@@ -29,10 +29,49 @@ fakermaker.settings:
           mapping:
             name:
               type: string
-              label: 'Content Type Name'
+              label: 'Entity Type Name'
             status:
               type: string
-              label: 'Faker Status for Content Type'
+              label: 'Faker Status for Entity Type'
+            weight:
+              type: integer
+              label: 'Generation Order'
+        comment:
+          type: mapping
+          label: 'Default Comment'
+          mapping:
+            name:
+              type: string
+              label: 'Entity Type Name'
+            status:
+              type: string
+              label: 'Faker Status for Entity Type'
+            weight:
+              type: integer
+              label: 'Generation Order'
+        user:
+          type: mapping
+          label: User
+          mapping:
+            name:
+              type: string
+              label: 'Entity Type Name'
+            status:
+              type: string
+              label: 'Faker Status for Entity Type'
+            weight:
+              type: integer
+              label: 'Generation Order'
+        tags:
+          type: mapping
+          label: 'Tags'
+          mapping:
+            name:
+              type: string
+              label: 'Entity Type Name'
+            status:
+              type: string
+              label: 'Faker Status for Entity Type'
             weight:
               type: integer
               label: 'Generation Order'
