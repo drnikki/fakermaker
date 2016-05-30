@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\fakermaker\Plugin\FakerMaker\GenerateFakerMaker.
+ * Contains \Drupal\fakermaker\Plugin\FakerMaker\NodeFakerMaker.
  */
 
 namespace Drupal\fakermaker\Plugin\FakerMaker;
@@ -15,23 +15,36 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides a GenerateFakerMaker plugin.
+ * Provides a NodeFakerMaker plugin.
  *
  * @FakerMaker(
- *   id = "generate",
- *   label = @Translation("generate"),
+ *   id = "node_type",
+ *   label = @Translation("node"),
  *   description = @Translation("Use the Faker library to generate real world content."),
- *   url = "generate",
+ *   url = "content",
  *   permission = "generate fakermaker data",
  *   settings = {}
  * )
  */
-class GenerateFakerMaker extends FakerMakerBase implements ContainerFactoryPluginInterface {
+class NodeFakerMaker extends FakerMakerBase implements ContainerFactoryPluginInterface {
 
   protected $nodeStorage;
   protected $nodeTypeStorage;
 
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage) {
+    /**
+   * Constructs a new NodeFakerMaker object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param array $plugin_definition
+   * @param \Drupal\Core\Entity\EntityStorageInterface $node_storage
+   *   The comment storage.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $node_type_storage
+   *   The comment type storage.
+   */
+public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageInterface $node_storage, EntityStorageInterface $node_type_storage) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->nodeStorage = $node_storage;
@@ -49,6 +62,9 @@ class GenerateFakerMaker extends FakerMakerBase implements ContainerFactoryPlugi
   }
 
   public function settingsForm(array $form, FormStateInterface $form_state) {
+    $form = array(
+      '#markup' => '<h3>Add options for the creation routine here. Also maybe a link to run the Faker creations scripts.</h3>'
+    );
     return $form;
   }
 }

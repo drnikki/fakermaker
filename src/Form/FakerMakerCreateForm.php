@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\fakermaker\Form\FakerMakerForm.
+ * Contains \Drupal\fakermaker\Form\FakerMakerCreateForm.
  */
 
 namespace Drupal\fakermaker\Form;
@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\fakermaker\FakerMakerException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class FakerMakerForm extends FormBase {
+class FakerMakerCreateForm extends FormBase {
 
   protected $fakerMakerManager;
 
@@ -26,7 +26,7 @@ class FakerMakerForm extends FormBase {
   }
 
   public function getFormId() {
-    return 'fakermaker_form_' . $this->getPluginIdFromRequest();
+    return 'fakermaker_create_form_' . $this->getPluginIdFromRequest();
   }
 
   protected function getPluginIdFromRequest() {
@@ -57,8 +57,6 @@ class FakerMakerForm extends FormBase {
     try {
       $plugin_id = $this->getPluginIdFromRequest();
       $instance = $this->getPluginInstance($plugin_id);
-      //ksm($instance);
-//       $instance->generate($form_state->getValues());
     }
     catch (FakerMakerException $e) {
       $this->logger('FakerMaker', $this->t('FakerMaker failed due to "%error".', array('%error' => $e->getMessage())));
