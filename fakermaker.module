@@ -4,3 +4,117 @@
  * @file
  * Functions for fakermaker.
  */
+
+require_once drupal_get_path('module', 'fakermaker') . '/vendor/autoload.php';
+
+/** Turning Fakermaker methods into tokens */
+
+/**
+ * Implements hook_token_info().
+ *
+ * @ingroup fakermaker_token
+ */
+function fakermaker_token_info() {
+  // Every token listed here needs to have a replacement pattern
+  // specified in hook_tokens().
+
+  // This first section determines the category in which the tokens appear in browsing windows
+  // and on admin/help/token
+  $info['types']['fakermaker'] = array(
+      'name' => t('FakerMaker'),
+      'description' => t('Tokens for FakerMaker data population.'),
+  //    'needs-data' => 'format',
+  );
+
+
+  $all_stuff = fakermaker_get_all_faker_methods();
+
+
+  // get the base patterns
+//  $base_patterns = $all_stuff['Base'];
+//  var_dump($base_patterns);
+
+
+  // ARBITRARILY NESTED TOKENS ARE NOT SUPPORTED. THAT'S PRETTY COOL.
+  foreach ($all_stuff as $provider => $patterns) {
+    // for every provider that's not the BASE, pop off the base patterns so they don't get repeated
+//    if ($provider != "Base") {
+//      $patterns = array_diff($patterns, $base_patterns);
+//    }
+
+    // erry pattern in the provider
+    foreach ($patterns as $pattern) {
+   //   var_dump($pattern);
+
+      $info['tokens']['fakermaker'][strtolower($provider). '.' . $pattern] = array(
+          'name' => t($pattern),
+          'description' => t('Token for ' . $pattern . ' in '. $provider), //UGH I KNOW
+      );
+
+    }
+
+  }
+
+  return $info;
+
+}
+
+function fakermaker_get_all_faker_methods() {
+  $factory = \Faker\Factory::create();
+  $providers = $factory->getProviders();
+  // This is hacky AF. And doesn't include descriptions.
+  // But it will work for now?  I guess?
+  $methods = array();
+  foreach($providers as $p) {
+    // get a clean classname - by default it's in it's full format:
+    // Faker\Provider\en_US\Payment
+    $class_name = substr( strrchr( get_class($p), '\\' ), 1 );
+    // @todo - pop off the constructor element
+
+    // WHAT WE NEED TO DO, ACTUALLY, IS LOOP THROUGH ALL OF THE BASE PROVIDER
+    // PROVIDEY THINGS AND THEN REMOVE THOSE METHODS FROM ANY SUBSEQUENT PROVIDERS
+    // BUT NOT NECESSARILY REMOVE INHERITED METHODS.
+
+    // who's job is it to pare those down? is it the function's job or is it the token's job to clean them up for dipslay?
+    if ($class_name == "Base") {
+      $base_methods = get_class_methods($p);
+    }
+
+
+    // HERE'S SOME CODE I COPIED FROM PHP.NET TO REMOVE INHERITED METHODS
+    // a1 is active class
+    $array1 = get_class_methods($p);
+    var_dump(count($array1));
+    if($parent_class = get_parent_class($p)) {
+      // IFFFFF the parent class has the same base name as the child class,
+      // do not diff them, just return array 1.  This is to get around
+      // some of the stuff that happens when locale-based classes are used.  OK.
+      $parent_class_name = substr( strrchr( get_parent_class($p), '\\' ), 1 );
+      if ($class_name == $parent_class_name) {
+        $array3 = $array1; // return samesies.
+      } else { // remove the inherited methods.
+        $array2 = get_class_methods($parent_class);
+        $array3 = array_diff($array1, $array2);
+      }
+
+    } else{
+      $array3 = $array1; //array 3 is what we want
+    }
+    //var_dump($class_name);
+
+//    if ($class_name == 'Person') {
+//      var_dump(get_class($p));
+//      var_dump($parent_class);
+//      var_dump(get_class_methods($p));
+//      var_dump($array3);
+//    }
+ // var_dump($p);
+   // var_dump(count($array3));
+
+    $methods[$class_name] = $array3;
+  }
+
+  var_dump($methods);
+  return $methods;
+
+}

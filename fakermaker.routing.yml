@@ -8,3 +8,11 @@ fakermaker.admin_display:
 
 route_callbacks:
   - '\Drupal\fakermaker\Routing\FakerMakerRoutes::routes'
+
+
+fakermaker.test:
+  path: '/fm-test'
+  defaults:
+    _controller: '\Drupal\fakermaker\Controller\TestingController::generate_test'
+  requirements:
+    _permission: 'access content'

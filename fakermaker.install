@@ -9,22 +9,22 @@ function fakermaker_schema() {
   $schema['fakermaker'] = array(
     'description' => 'FakerMaker base table.',
     'fields' => array(
-      'entity_id' => array(
-        'description' => 'The primary entity identifier.',
+      'fmid' => array(
+        'description' => 'The generated primary key.',
         'type' => 'serial',
         'not null' => TRUE,
         'unsigned' => TRUE
       ),
       'uuid' => array(
-        'description' => 'The unique entity identifier.',
+        'description' => 'The uuid.',
         'type' => 'varchar',
         'length' => 60,
         'not null' => TRUE
       ),
       // Defaults to NULL in order to avoid a brief period of potential
       // deadlocks on the index.
-      'nid' => array(
-        'description' => 'The generated node identifier.',
+      'eid' => array(
+        'description' => 'The identifier of the entity we generated.',
         'type' => 'int',
         'size' => 'normal',
         'not null' => FALSE,
@@ -38,10 +38,10 @@ function fakermaker_schema() {
         'not null' => TRUE
       )
     ),
-    'primary key' => array('entity_id'),
+    'primary key' => array('fmid'),
     'unique keys' => array(
       'uuid' => array('uuid'),
-      'nid' => array('nid')
+      'eid' => array('eid')
     )
   );
 
