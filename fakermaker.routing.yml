@@ -16,3 +16,11 @@ fakermaker.test:
     _controller: '\Drupal\fakermaker\Controller\TestingController::generate_test'
   requirements:
     _permission: 'access content'
+
+fakermaker.testing_form:
+  path: '/fm-form-test'
+  defaults:
+    _form:  '\Drupal\fakermaker\Form\FakerMakerTestingForm'
+    _title: 'Testing Form for tokens.'
+  requirements:
+    _permission: 'access content'

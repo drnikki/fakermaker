@@ -15,7 +15,7 @@ require_once drupal_get_path('module', 'fakermaker') . '/vendor/autoload.php';
  * @ingroup fakermaker_token
  */
 function fakermaker_token_info() {
-  // Every token listed here needs to have a replacement pattern
+  // @todo Every token listed here needs to have a replacement pattern
   // specified in hook_tokens().
 
   // This first section determines the category in which the tokens appear in browsing windows
@@ -26,16 +26,14 @@ function fakermaker_token_info() {
   //    'needs-data' => 'format',
   );
 
-
   $all_stuff = fakermaker_get_all_faker_methods();
-
 
   // get the base patterns
 //  $base_patterns = $all_stuff['Base'];
 //  var_dump($base_patterns);
+  var_dump($all_stuff);
 
-
-  // ARBITRARILY NESTED TOKENS ARE NOT SUPPORTED. THAT'S PRETTY COOL.
+  // ARBITRARILY NESTED TOKENS ARE NOT SUPPORTED. THAT'S PRETTY COOL. :/
   foreach ($all_stuff as $provider => $patterns) {
     // for every provider that's not the BASE, pop off the base patterns so they don't get repeated
 //    if ($provider != "Base") {
@@ -47,7 +45,7 @@ function fakermaker_token_info() {
    //   var_dump($pattern);
 
       $info['tokens']['fakermaker'][strtolower($provider). '.' . $pattern] = array(
-          'name' => t($pattern),
+          'name' => t($provider . '.' . $pattern),
           'description' => t('Token for ' . $pattern . ' in '. $provider), //UGH I KNOW
       );
 
@@ -62,6 +60,9 @@ function fakermaker_token_info() {
 function fakermaker_get_all_faker_methods() {
   $factory = \Faker\Factory::create();
   $providers = $factory->getProviders();
+
+  $documentor = new \Faker\Documentor($factory);
+ var_dump( $documentor->getFormatters());
   // This is hacky AF. And doesn't include descriptions.
   // But it will work for now?  I guess?
   $methods = array();
@@ -76,16 +77,15 @@ function fakermaker_get_all_faker_methods() {
     // BUT NOT NECESSARILY REMOVE INHERITED METHODS.
 
     // who's job is it to pare those down? is it the function's job or is it the token's job to clean them up for dipslay?
-    if ($class_name == "Base") {
-      $base_methods = get_class_methods($p);
-    }
+//    if ($class_name == "Base") {
+//      $base_methods = get_class_methods($p);
+//    }
 
 
     // HERE'S SOME CODE I COPIED FROM PHP.NET TO REMOVE INHERITED METHODS
     // a1 is active class
     $array1 = get_class_methods($p);
-    var_dump(count($array1));
-    if($parent_class = get_parent_class($p)) {
+    if ($parent_class = get_parent_class($p)) {
       // IFFFFF the parent class has the same base name as the child class,
       // do not diff them, just return array 1.  This is to get around
       // some of the stuff that happens when locale-based classes are used.  OK.
@@ -114,7 +114,9 @@ function fakermaker_get_all_faker_methods() {
     $methods[$class_name] = $array3;
   }
 
-  var_dump($methods);
+ // var_dump($methods);
+
+
   return $methods;
 
 }
